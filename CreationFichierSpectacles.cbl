@@ -37,7 +37,8 @@
        
        procedure division.
 
-
+       main.
+	   
            goback.
 
        end program CreationFichierSpectacles.
