@@ -1,0 +1,40 @@
+┌───*DossierCobol
+│ o───────────o
+│ │ Obtention │
+│ o───────────o↓ enregMaj, eof
+│ 
+│╔══ do while(eof = false)
+│║┌── if(enregMaj.codeMaj == N)
+│║│ o───────────────o↓ enregMaj
+│║│ │ nouvSpectacle │
+│║│ o───────────────o↓ codeErreur
+│║├── else
+│║│┌── if(enregMaj.codeMaj == R)
+│║││ o─────────────o↓ enregMaj
+│║││ │ reservation │
+│║││ o─────────────o↓ codeErreur
+│║│├── else
+│║││ o────────────o↓ enregMaj
+│║││ │ annulation │
+│║││ o────────────o↓ codeErreur
+│║│└──
+│║└──;
+│║ o──────────────o↓ codeErreur
+│║ │ listeErreurs │
+│║ o──────────────o
+│║ o───────────o
+│║ │ Obtention │
+│║ o───────────o↓ enregMaj, eof
+│╙──
+│ o─────────o
+│ │ listing │
+│ o─────────o
+└──
+ 
+ 
+┌───*Annulation
+│ 
+│ 
+└──
+ 
+ 
