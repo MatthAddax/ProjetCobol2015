@@ -1,4 +1,5 @@
-       program-id. CreationFichierSpectacles as "CreationFichierSpectacles".
+       program-id. CreationFichierSpectacles as
+       "CreationFichierSpectacles".
 
        environment division.
       *========================================
@@ -6,13 +7,13 @@
       *----------------------------------------
        file-control.
       *****************************************
-           select FiSpectacle assign "../../Fichiers/SPECTACLE.IND"
+           select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
                organization is indexed access mode is random
                record key is codeSpect
                    alternate record key is titre
                    alternate record key is dateRepresentation
                    file status is fs-fiSpectacle.
-           
+
        configuration section.
       *----------------------------------------
 
@@ -34,11 +35,11 @@
        working-storage section.
       *----------------------------------------
        77 fs-fiSpectacle                   pic x(2).
-       
+
        procedure division.
 
        main.
-	   
+
            goback.
 
        end program CreationFichierSpectacles.

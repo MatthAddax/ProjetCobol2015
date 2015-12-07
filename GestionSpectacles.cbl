@@ -6,15 +6,15 @@
       *----------------------------------------
        file-control.
       *****************************************
-           select FiSpectacle assign "../../Fichiers/SPECTACLE.IND"
+           select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
                organization is indexed access mode is random
                record key is codeSpect
                    alternate record key is titre
                    alternate record key is dateRepresentation
                    file status is fs-fiSpectacle.
-           
-           select FiSalle assign "../../Fichiers/SALLE.REL"
-               organization is relative 
+
+           select FiSalle assign "../Fichiers/SALLE.REL"
+               organization is relative
                access mode is dynamic
                relative key is salleID
                    file status is fs-fiSalle.
@@ -48,12 +48,12 @@
        77 fs-fiSalle                       pic x(2).
        77 fs-fiMaj                         pic x(2).
            88 finFiMaj                     value "10".
-           
-          
+
+
        procedure division.
       *========================================
        main.
       *****************************************
-      
-       
+
+
        end program GestionSpectacles.
