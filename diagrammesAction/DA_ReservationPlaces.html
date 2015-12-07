@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><title>DA 8lksn6</title></head><body><pre>┌───*<span style="color:#008000">ReservationPlaces</span>
+│ <span style="color:#0000ff">o───────────────────────────────────────o</span><span style="color:#0000ff">↓ </span>FiSpectacle,Titre,DateRepresentation
+│ <span style="color:#0000ff">│ RechercheSpectacleSiPlacesDisponibles │</span>
+│ <span style="color:#0000ff">o───────────────────────────────────────o</span><span style="color:#0000ff">↓ </span>codeErreur
+│┌── <span style="color:#0000ff">if</span>(codeErreur EQUALS 0)
+││ EnregSpectacle.tabReservationCategories[categReservée].nbPlaces += nbReserve
+│└──
+└──
+ 
+┌───*<span style="color:#008000"> RechercheSpectacleSiPlacesDisponibles</span>
+│ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>FiSpectacle,Titre,DateRepresentation
+│ <span style="color:#0000ff">│ Obtention │</span>
+│ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>EnregSpectacle
+│┌── <span style="color:#0000ff">if</span>(VALID KEYS)
+││ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>FiSalle,NumSalle
+││ <span style="color:#0000ff">│ Obtention │</span>
+││ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>EnregSalle
+││┌── <span style="color:#0000ff">if</span>(EnregSpectacle.tabReservationCategories[categReservée].nbPlaces + nbReserv > EnregSalle.categorie[categReservée].nbPlacesMax)
+│││ codeErreur 04
+││└──
+││ 
+│├── <span style="color:#0000ff">else</span>
+││┌── <span style="color:#0000ff">if</span>(NOT VALID TITRE)
+│││ codeErreur = 02
+││├── <span style="color:#0000ff">else</span>
+│││┌── <span style="color:#0000ff">if</span>(NOT VALID DATE)
+││││ codeErreur = 03
+│││└──
+││└──
+│└──
+└──
+</pre></body></html>

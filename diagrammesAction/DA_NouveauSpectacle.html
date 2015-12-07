@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><title>DA 9uobwt</title></head><body><pre>┌───*<span style="color:#008000">NouveauSpectacle</span>
+│ <span style="color:#0000ff">o─────────────────o</span><span style="color:#0000ff">↓ </span>enregMaj.codeGenre, FiSpectacle
+│ <span style="color:#0000ff">│ codeGenreExists │</span>
+│ <span style="color:#0000ff">o─────────────────o</span><span style="color:#0000ff">↓ </span>genreExists
+│┌── <span style="color:#0000ff">if</span>(genreExists == true)
+││ <span style="color:#0000ff">o─────────────────────o</span>
+││ <span style="color:#0000ff">║ ajoutRepresentation │</span>
+││ <span style="color:#0000ff">o─────────────────────o</span>
+│├── <span style="color:#0000ff">else</span>
+││ <span style="color:#0000ff">o────────────────o</span>
+││ <span style="color:#0000ff">║ créerSpectacle │</span>
+││ <span style="color:#0000ff">o────────────────o</span>
+│└──
+│ 
+│┌───*<span style="color:#008000">ajoutRepresentation</span>
+││ <span style="color:#0000ff">o──────────────────────o</span><span style="color:#0000ff">↓ </span>FiSpectable,codeGenre
+││ <span style="color:#0000ff">│ rechCodeNumPlusEleve │</span>
+││ <span style="color:#0000ff">o──────────────────────o</span><span style="color:#0000ff">↓ </span>codeNum
+││╔══ <span style="color:#0000ff">do while</span>(codeGenreNouveau == codeGenre <span style="color:#0000ff">OR</span> eof)
+││║ codeNum += 1
+││║ numSalle = numSalleNouveau
+││║ dateRepresentation = dateNouveau
+││║ 
+││║╔══ <span style="color:#0000ff">do while</span>(i < 3)
+││║║ tabReservationsCategories[i].nbReservations = 0
+││║║ i++
+││║╙──   
+││║ 
+││║ <span style="color:#0000ff">o─────────────────o</span><span style="color:#0000ff">↓ </span>enregNouvelleRepresentation
+││║ <span style="color:#0000ff">║ UpdateSpectacle │</span>
+││║ <span style="color:#0000ff">o─────────────────o</span>
+││║ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>FiMaj
+││║ <span style="color:#0000ff">│ Obtention │</span>
+││║ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>enregMaj, eof
+││╙──
+│└──
+│ 
+│ 
+│┌───*<span style="color:#008000"> créerSpectacle</span>
+││ codeNum = 1
+││╔══ <span style="color:#0000ff">do while</span>(codeGenreNouveau == codeGenre <span style="color:#0000ff">OR</span> eof)
+││║ numSalle = numSalleNouveau
+││║ dateRepresentation = dateNouveau
+││║ 
+││║╔══ <span style="color:#0000ff">do while</span>(i < 3)
+││║║ tabReservationsCategories[i].nbReservations = 0
+││║║ i++
+││║╙──   
+││║ 
+││║ <span style="color:#0000ff">o─────────────────o</span><span style="color:#0000ff">↓ </span>enregNouvelleRepresentation
+││║ <span style="color:#0000ff">║ UpdateSpectacle │</span>
+││║ <span style="color:#0000ff">o─────────────────o</span>
+││║ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>FiMaj
+││║ <span style="color:#0000ff">│ Obtention │</span>
+││║ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>enregMaj, eof
+││║ codeNum += 1
+││╙──
+│└──
+│ 
+│ 
+│┌───*<span style="color:#008000">CodeGenreExists</span>
+││╔══ <span style="color:#0000ff">do</span>
+││║ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>FiSpectacle
+││║ <span style="color:#0000ff">│ Obtention │</span>
+││║ <span style="color:#0000ff">o───────────o</span><span style="color:#0000ff">↓ </span>enregSpectacle, eof
+││╙──  while(not eof OR enregSpectacle.codeGenre == enregMaj.codeGenre)
+│└──
+│ 
+│┌───*<span style="color:#008000">RechercheCodePlusEleve</span>
+││ Utiliser Read et Start des fichiers indexés (VALID et INVALID KEY)
+│└──
+</pre></body></html>

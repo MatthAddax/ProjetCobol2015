@@ -1,0 +1,25 @@
+---*ReservationPlaces
+  [fonct1=RechercheSpectacleSiPlacesDisponibles;FiSpectacle,Titre,DateRepresentation;codeErreur]
+  if(codeErreur EQUALS 0)
+    EnregSpectacle.tabReservationCategories[categReservée].nbPlaces += nbReserve
+  ___
+___
+
+---* RechercheSpectacleSiPlacesDisponibles
+  [fonct1=Obtention;FiSpectacle,Titre,DateRepresentation;EnregSpectacle]
+  if(VALID KEYS)
+    [fonct1=Obtention;FiSalle,NumSalle;EnregSalle]
+    if(EnregSpectacle.tabReservationCategories[categReservée].nbPlaces + nbReserv > EnregSalle.categorie[categReservée].nbPlacesMax)
+      codeErreur 04
+    ___
+
+  else
+    if(NOT VALID TITRE)
+      codeErreur = 02
+    else
+      if(NOT VALID DATE)
+        codeErreur = 03
+      ___
+    ___
+  ___
+___
