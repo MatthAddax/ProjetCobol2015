@@ -3,19 +3,20 @@
 
        environment division.
       *========================================
+       configuration section.
+      *----------------------------------------
        input-output section.
       *----------------------------------------
        file-control.
       *****************************************
            select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
-               organization is indexed access mode is random
+               organization is indexed access mode is RANDOM
                record key is codeSpect
                    alternate record key is titre
+                       with duplicates
                    alternate record key is dateRepresentation
+                       with duplicates
                    file status is fs-fiSpectacle.
-
-       configuration section.
-      *----------------------------------------
 
        data division.
       *========================================
