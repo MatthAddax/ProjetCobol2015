@@ -63,7 +63,7 @@
                03 categAnnulation          pic 9.
                03 nbPlacesAnnulation       pic 99.
        01 EnregDateRepresentation.
-           02 codeGenreNouveau             pic x(7).
+           02 codeGenreNouveau             pic x(5).
            02 numSalleNouveau              pic 99.
            02 dateRepresentationNouveau    pic 9(4).
        working-storage section.
@@ -75,7 +75,7 @@
        77 fs-fiMaj                         pic x(2).
            88 finFiMaj             VALUE "10".
        77 iCategorie                       pic 9.
-
+       77 cleLectureIndexe                 pic x(5).
        procedure division.
       *========================================
        main.
@@ -108,7 +108,10 @@
       *****************************************
        ajoutSpectacle.
       *****************************************
-       MOVE spaces TO codeGenre.
+      *----------------------------------------
+      *--------------Garnir clé----------------
+      *----------------------------------------
+           MOVE spaces TO codeGenre.
 
            START FiSpectacle key is > codeGenre
                    INVALID KEY PERFORM ajoutNouveauSpectacle
