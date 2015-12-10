@@ -8,6 +8,8 @@
       *----------------------------------------
        file-control.
       *****************************************
+      *Regarder si variables assignées au bon endroit!!! :D
+      *****************************************
           select OPTIONAL FiSpectacle assign "../Fichiers/SPECTACLE.IND"
               organization is indexed access mode is random
               record key is codeSpect
