@@ -111,9 +111,9 @@
       *----------------------------------------
       *--------------Garnir clé----------------
       *----------------------------------------
-           MOVE spaces TO codeGenre.
+           MOVE spaces TO codeSpect.
 
-           START FiSpectacle key is > codeGenre
+           START FiSpectacle key is > codeSpect
                    INVALID KEY PERFORM ajoutNouveauSpectacle
                                UNTIL FinFiMaj OR
                                codeGenreNouv NOT EQUALS codeGenreNouveau
