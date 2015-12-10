@@ -112,6 +112,8 @@
 
            START FiSpectacle key is > codeGenre
                    INVALID KEY PERFORM ajoutNouveauSpectacle
+                               UNTIL FinFiMaj OR
+                               codeGenreNouv NOT EQUALS codeGenreNouveau
                    not INVALID KEY READ FiSpectacle NEXT
            END-START.
 
@@ -123,7 +125,8 @@
                PERFORM ajoutRepresentation UNTIL FinFiMaj
                                 OR codeGenre NOT EQUALS codeGenreNouveau
            ELSE
-               PERFORM ajoutNouveauSpectacle
+               PERFORM ajoutNouveauSpectacle UNTIL FinFiMaj OR
+                               codeGenreNouv NOT EQUALS codeGenreNouveau
            END-IF.
       *****************************************
        codeGenreExists.
@@ -137,6 +140,7 @@
        ajoutNouveauSpectacle.
       *****************************************
            DISPLAY 'Création représentation'.
+           READ FiMaj.
            MOVE 1 TO codeNum.
            MOVE codeGenreNouv TO codeGenre.
            PERFORM creationRepresentation.
@@ -144,6 +148,7 @@
        ajoutRepresentation.
       *****************************************
            DISPLAY 'Ajout de représentation'.
+           READ FiMaj.
            ADD 1 TO codeNum.
            PERFORM creationRepresentation.
       *****************************************
