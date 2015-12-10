@@ -8,21 +8,23 @@
       *----------------------------------------
        file-control.
       *****************************************
-           select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
-               organization is indexed access mode is random
-               record key is codeSpect
-                   alternate record key is titre
-                   alternate record key is dateRepresentation
-                   file status is fs-fiSpectacle.
+      *Regarder si variables assignées au bon endroit!!! :D
+      *****************************************
+          select OPTIONAL FiSpectacle assign "../Fichiers/SPECTACLE.IND"
+              organization is indexed access mode is random
+              record key is codeSpect
+                  alternate record key is titre
+                  alternate record key is dateRepresentation
+                  file status is fs-fiSpectacle.
 
-           select FiSalle assign "../Fichiers/SALLE.REL"
-               organization is relative
-               access mode is dynamic
-               relative key is salleID
-                   file status is fs-fiSalle.
-           SELECT FiMaj assign "../Fichiers/MAJ.SEQ"
-               ORGANIZATION IS LINE SEQUENTIAL
-               FILE STATUS IS fs-FiMaj.
+          select FiSalle assign "../Fichiers/SALLE.REL"
+              organization is relative
+              access mode is dynamic
+              relative key is salleID
+                  file status is fs-fiSalle.
+          SELECT FiMaj assign "../Fichiers/MAJ.SEQ"
+              ORGANIZATION IS LINE SEQUENTIAL
+              FILE STATUS IS fs-FiMaj.
        data division.
       *========================================
        file section.
@@ -60,7 +62,10 @@
                03 codeSpectacleAnnulation  pic x(7).
                03 categAnnulation          pic 9.
                03 nbPlacesAnnulation       pic 99.
-
+       01 EnregDateRepresentation.
+           02 codeGenreNouveau             pic x(7).
+           02 numSalleNouveau              pic 99.
+           02 dateRepresentationNouveau    pic 9(4).
        working-storage section.
       *----------------------------------------
        77 fs-fiSpectacle                   pic x(2).
@@ -68,34 +73,55 @@
        77 fs-fiSalle                       pic x(2).
            88 finErreurFiSalle     VALUES "10" THRU "99".
        77 fs-fiMaj                         pic x(2).
-           88 finFiMaj                     value "10".
-
+           88 finFiMaj             VALUE "10".
+       77 iCategorie                       pic 9.
 
        procedure division.
       *========================================
        main.
+           OPEN INPUT FiMaj.
            OPEN I-O FiSpectacle.
       *****************************************
       ********** LECTURE FICHIER MAJ **********
       *****************************************
+           READ FiMaj.
+           PERFORM choixActionMaj UNTIL finFiMaj.
 
 
 
+           CLOSE FiSpectacle FiMaj.
 
+      *****************************************
+       choixActionMaj.
+      *****************************************
 
+           EVALUATE codeMaj
+               WHEN 'N'
+                   PERFORM ajoutSpectacle
+               WHEN 'R'
+                   DISPLAY 'Reservation'
+               WHEN 'A'
+                   DISPLAY 'Annulation'
+           END-EVALUATE.
+
+           READ FiMaj.
       *****************************************
        ajoutSpectacle.
       *****************************************
        MOVE spaces TO codeGenre.
 
            START FiSpectacle key is > codeGenre
-                   INVALID KEY DISPLAY "Fichier vide"
+                   INVALID KEY PERFORM ajoutNouveauSpectacle
                    not INVALID KEY READ FiSpectacle NEXT
            END-START.
-           perform codeGenreExists until finErreurFiSpectacle
+
+           PERFORM codeGenreExists until finErreurFiSpectacle
                                       OR codeGenre EQUALS codeGenreNouv.
            IF codeGenre EQUALS codeGenreNouv THEN
-               PERFORM codePlusEleve
+               PERFORM codePlusEleve UNTIL finErreurFiSpectacle
+                                   OR codeGenre NOT EQUALS codeGenreNouv
+               PERFORM ajoutRepresentation UNTIL FinFiMaj
+                                OR codeGenre NOT EQUALS codeGenreNouveau
            ELSE
                PERFORM ajoutNouveauSpectacle
            END-IF.
@@ -103,12 +129,33 @@
        codeGenreExists.
       *****************************************
            READ FiSpectacle NEXT.
-
       *****************************************
        codePlusEleve.
       *****************************************
-
+           READ FiSpectacle NEXT.
       *****************************************
        ajoutNouveauSpectacle.
       *****************************************
+           DISPLAY 'Création représentation'.
+           MOVE 1 TO codeNum.
+           MOVE codeGenreNouv TO codeGenre.
+           PERFORM creationRepresentation.
+      *****************************************
+       ajoutRepresentation.
+      *****************************************
+           DISPLAY 'Ajout de représentation'.
+           ADD 1 TO codeNum.
+           PERFORM creationRepresentation.
+      *****************************************
+       creationRepresentation.
+      *****************************************
+           MOVE dateRepresentationNouveau TO dateRepresentation.
+           MOVE numSalleNouveau TO numSalle.
+           MOVE titreNouv TO titre.
+           PERFORM VARYING iCategorie FROM 1 BY 1 UNTIL iCategorie > 3
+               MOVE 0 TO nbReservations(iCategorie)
+           END-PERFORM.
+           DISPLAY EnregSpectacle.
+           WRITE EnregSpectacle.
+
        end program GestionSpectacles.
