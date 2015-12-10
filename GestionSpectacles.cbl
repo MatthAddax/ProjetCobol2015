@@ -139,7 +139,6 @@
       *****************************************
        ajoutNouveauSpectacle.
       *****************************************
-           DISPLAY 'Création représentation'.
            READ FiMaj.
            MOVE 1 TO codeNum.
            MOVE codeGenreNouv TO codeGenre.
@@ -147,7 +146,6 @@
       *****************************************
        ajoutRepresentation.
       *****************************************
-           DISPLAY 'Ajout de représentation'.
            READ FiMaj.
            ADD 1 TO codeNum.
            PERFORM creationRepresentation.
