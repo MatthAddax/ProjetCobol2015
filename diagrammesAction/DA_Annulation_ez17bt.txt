@@ -1,0 +1,29 @@
+┌───*Annulation
+│ o────────────────────o↓ enregMaj.codeSpectAnnulation
+│ │ rechercheCodeSpect │
+│ o────────────────────o↓ codeErreur,enregSpect
+│┌── if(codeErreur = 0)
+││ o────────────────────o↓ enregMaj.categAnnulation, enregSpect
+││ │ rechercheCategorie │
+││ o────────────────────o↓ iReserv
+││┌── if(codeErreur = 0)
+│││ nbReserv(iReserv)-=nbAnnulation
+││└──
+│└──
+└──
+ 
+┌───*rechercheCodeSpect
+│ o───────────o↓ enregMaj.codeSpectAnnulation
+│ │ Obtention │
+│ o───────────o↓ enregSpect
+│┌── if(UNVALID KEYS)
+││ codeErreur = 5
+│└──
+└──
+ 
+┌───*rechercheCategorie
+│ iReserv = 0
+│╔══ do until(iReserv == enregMaj.categAnnulation)
+│║ iReserv++
+│╙──
+└──
