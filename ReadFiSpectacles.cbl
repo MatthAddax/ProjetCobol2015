@@ -16,7 +16,7 @@
        FILE-CONTROL.
       *-----------------------
           select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
-              organization is indexed access mode is random
+              organization is indexed access mode is DYNAMIC
               record key is codeSpect
                   alternate record key is titre
                   alternate record key is dateRepresentation
@@ -54,7 +54,7 @@
            02 dateRepresentationEd         pic 9999.
            02                              pic x(23)
                                         VALUE " Reservations : ".
-           02 tabReservationsCategoriesEd  pic x(18).
+           02 tabReservationsCategoriesEd  pic 9(9).
            02 REDEFINES tabReservationsCategoriesEd.
                03 nbReservationsEd         pic ZZ9.
 
@@ -65,13 +65,18 @@
       **
       * The main procedure of the program
       **
-
-           START FiSpectacle key is > codeGenre
+           OPEN I-O FiSpectacle.
+           DISPLAY fs-FiSpectacle.
+           MOVE SPACES TO codeSpect.
+           START FiSpectacle key is > codeSpect
                    INVALID KEY DISPLAY "Fichier vide"
                    not INVALID KEY READ FiSpectacle NEXT
            END-START.
-           PERFORM afficheSpectacle.
-            STOP RUN.
+           DISPLAY fs-FiSpectacle.
+           PERFORM afficheSpectacle UNTIL finErreurFiSpectacle.
+           DISPLAY fs-FiSpectacle.
+           CLOSE FiSpectacle.
+           STOP RUN.
 
        afficheSpectacle.
            move codeSpect to codeSpectEd.
@@ -82,5 +87,7 @@
                            to tabReservationsCategoriesEd.
 
            display ligneAffichage.
-      ** add other procedures here
+           display EnregSpectacle.
+           READ FiSpectacle NEXT.
+       ** add other procedures here
        END PROGRAM YOUR-PROGRAM-NAME.

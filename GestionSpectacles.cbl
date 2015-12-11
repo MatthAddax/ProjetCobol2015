@@ -76,11 +76,13 @@
            88 finFiMaj             VALUE "10".
        77 iCategorie                       pic 9.
        77 cleLectureIndexe                 pic x(5).
+       77 codeNumPrec                      pic 9(2).
        procedure division.
       *========================================
        main.
            OPEN INPUT FiMaj.
            OPEN I-O FiSpectacle.
+           DISPLAY fs-FiSpectacle.
       *****************************************
       ********** LECTURE FICHIER MAJ **********
       *****************************************
@@ -111,7 +113,7 @@
       *----------------------------------------
       *--------------Garnir clé----------------
       *----------------------------------------
-           MOVE spaces TO codeSpect.
+           MOVE SPACES TO codeSpect.
 
            START FiSpectacle key is > codeSpect
                    INVALID KEY PERFORM ajoutNouveauSpectacle
@@ -120,6 +122,7 @@
                    not INVALID KEY READ FiSpectacle NEXT
            END-START.
 
+           DISPLAY fs-FiSpectacle.
            PERFORM codeGenreExists until finErreurFiSpectacle
                                       OR codeGenre EQUALS codeGenreNouv.
            IF codeGenre EQUALS codeGenreNouv THEN
@@ -138,6 +141,7 @@
       *****************************************
        codePlusEleve.
       *****************************************
+           move codeNum to codeNumPrec.
            READ FiSpectacle NEXT.
       *****************************************
        ajoutNouveauSpectacle.
@@ -150,7 +154,8 @@
        ajoutRepresentation.
       *****************************************
            READ FiMaj.
-           ADD 1 TO codeNum.
+           ADD 1 TO codeNumPrec.
+           MOVE codeNumPrec TO codeNum.
            PERFORM creationRepresentation.
       *****************************************
        creationRepresentation.
