@@ -95,27 +95,29 @@
        77 iCategorie                       pic 9.
        77 titreSave                        pic x(30).
        77 codeGenreSave                    pic x(5).
+       77 placesTemp                       pic 9(3).
        PROCEDURE DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        MAIN-PROCEDURE.
       ************************************
            OPEN INPUT FiMaj FiSalle.
            OPEN I-O FiSpectacle.
-           OPEN output debug.
+           OPEN output debug FiErreur.
            DISPLAY fs-FiSpectacle.
            display fs-FiMaj.
            read FiMaj.
 
            perform miseAJour until finFiMaj.
 
-           close FiMaj, FiSpectacle, debug, FiSalle.
+           close FiMaj, FiSpectacle, debug, FiSalle, FiErreur.
            stop run.
        miseAJour.
       ************************************
+           move SPACES to EnregDebug.
            evaluate codeMaj
                WHEN 'N'
-                   display "ajoutSpectacle"
-                   move "ajoutSpectacle" to EnregDebug
+      *             display "ajoutSpectacle"
+      *             move "ajoutSpectacle" to EnregDebug
                    perform ajoutSpectacle
                WHEN 'R'
                    DISPLAY 'Reservation'
@@ -177,13 +179,15 @@
       *******  lire fichier salles *******
       ************************************
 
-       miseAJourPlaces.
-      ************************************
            move numSalle to salleID.
            start FiSalle key is = salleID
                invalid key display "salle inexistante"
-               not invalid key display "salle ok"
+               not invalid key perform miseAJourPlaces
            end-start.
+       miseAJourPlaces.
+      ************************************
+           add nbPlaces(categReserve) to nbPlacesReserve
+               giving placesTemp.
 
 
 
