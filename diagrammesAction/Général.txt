@@ -1,0 +1,156 @@
+┌───*DossierCobol
+│ o───────────o
+│ │ Obtention │
+│ o───────────o↓ enregMaj, eof
+│ 
+│╔══ do while(eof = false)
+│║┌── if(enregMaj.codeMaj == N)
+│║│ o───────────────o↓ enregMaj
+│║│ │ nouvSpectacle │
+│║│ o───────────────o↓ codeErreur
+│║├── else
+│║│┌── if(enregMaj.codeMaj == R)
+│║││ o─────────────o↓ enregMaj
+│║││ │ reservation │
+│║││ o─────────────o↓ codeErreur
+│║│├── else
+│║││ o────────────o↓ enregMaj
+│║││ │ annulation │
+│║││ o────────────o↓ codeErreur
+│║│└──
+│║└──
+│║ o──────────────o↓ codeErreur
+│║ │ listeErreurs │
+│║ o──────────────o
+│║ o───────────o
+│║ │ Obtention │
+│║ o───────────o↓ enregMaj, eof
+│╙──
+│ o─────────o
+│ │ listing │
+│ o─────────o
+└──
+ 
+┌───*NouveauSpectacle
+│ o─────────────────o↓ enregMaj.codeGenre, FiSpectacle
+│ │ codeGenreExists │
+│ o─────────────────o↓ genreExists
+│┌── if(genreExists == true)
+││ o─────────────────────o
+││ ║ ajoutRepresentation │
+││ o─────────────────────o
+│├── else
+││ o────────────────o
+││ ║ créerSpectacle │
+││ o────────────────o
+│└──
+└──
+ 
+┌───*ajoutRepresentation
+│ o──────────────────────o↓ FiSpectable,codeGenre
+│ │ rechCodeNumPlusEleve │
+│ o──────────────────────o↓ codeNum
+│╔══ do while(codeGenreNouveau == codeGenre OR eof)
+│║ codeNum += 1
+│║ numSalle = numSalleNouveau
+│║ dateRepresentation = dateNouveau
+│║ 
+│║╔══ do while(i < 3)
+│║║ tabReservationsCategories[i].nbReservations = 0
+│║║ i++
+│║╙──   
+│║ 
+│║ o─────────────────o↓ enregNouvelleRepresentation
+│║ ║ UpdateSpectacle │
+│║ o─────────────────o
+│║ o───────────o↓ FiMaj
+│║ │ Obtention │
+│║ o───────────o↓ enregMaj, eof
+│╙──
+└──
+ 
+ 
+┌───* créerSpectacle
+│ codeNum = 1
+│╔══ do while(codeGenreNouveau == codeGenre OR eof)
+│║ numSalle = numSalleNouveau
+│║ dateRepresentation = dateNouveau
+│║ 
+│║╔══ do while(i < 3)
+│║║ tabReservationsCategories[i].nbReservations = 0
+│║║ i++
+│║╙──   
+│║ 
+│║ o─────────────────o↓ enregNouvelleRepresentation
+│║ ║ UpdateSpectacle │
+│║ o─────────────────o
+│║ o───────────o↓ FiMaj
+│║ │ Obtention │
+│║ o───────────o↓ enregMaj, eof
+│║ codeNum += 1
+│╙──
+└──
+ 
+ 
+┌───*CodeGenreExists
+│╔══ do
+│║ o───────────o↓ FiSpectacle
+│║ │ Obtention │
+│║ o───────────o↓ enregSpectacle, eof
+│╙──  while(not eof OR enregSpectacle.codeGenre == enregMaj.codeGenre)
+└──
+ 
+┌───*RechercheCodePlusEleve
+│ Utiliser Read et Start des fichiers indexés (VALID et INVALID KEY)
+└──
+ 
+┌───*ReservationPlaces
+│ o───────────────────────────────────────o↓ FiSpectacle,Titre,DateRepresentation
+│ │ RechercheSpectacleSiPlacesDisponibles │
+│ o───────────────────────────────────────o↓ codeErreur
+│┌── if(codeErreur EQUALS 0)
+││ EnregSpectacle.tabReservationCategories[categReservée].nbPlaces += nbReserve
+│└──
+└──
+ 
+┌───* RechercheSpectacleSiPlacesDisponibles
+│ o───────────o↓ FiSpectacle,Titre,DateRepresentation
+│ │ Obtention │
+│ o───────────o↓ EnregSpectacle
+│┌── if(VALID KEYS)
+││ o───────────o↓ FiSalle,NumSalle
+││ │ Obtention │
+││ o───────────o↓ EnregSalle
+││┌── if(EnregSpectacle.tabReservationCategories[categReservée].nbPlaces + nbReserv > EnregSalle.categorie[categReservée].nbPlacesMax)
+│││ codeErreur 04
+││└──
+││ 
+│├── else
+││┌── if(NOT VALID TITRE)
+│││ codeErreur = 02
+││├── else
+│││┌── if(NOT VALID DATE)
+││││ codeErreur = 03
+│││└──
+││└──
+│└──
+└──
+ 
+┌───*Annulation
+│ o────────────────────o↓ enregMaj.codeSpectAnnulation
+│ │ rechercheCodeSpect │
+│ o────────────────────o↓ codeErreur,enregSpect
+│┌── if(codeErreur = 0)
+││ nbReserv(enregMaj.categAnnulation)-=nbAnnulation
+│└──
+└──
+ 
+┌───*rechercheCodeSpect
+│ o───────────o↓ enregMaj.codeSpectAnnulation
+│ │ Obtention │
+│ o───────────o↓ enregSpect
+│┌── if(UNVALID KEYS)
+││ codeErreur = 5
+│└──
+└──
+ 

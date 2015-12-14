@@ -90,7 +90,6 @@
            move dateRepresentation to dateRepresentationEd.
            move tabReservationsCategories
                            to tabReservationsCategoriesEd.
-           display "test".
            display ligneAffichage.
            display EnregSpectacle.
            READ FiSpectacle NEXT.

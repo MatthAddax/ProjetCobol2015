@@ -11,10 +11,11 @@
       *Regarder si variables assignées au bon endroit!!! :D
       *****************************************
           select OPTIONAL FiSpectacle assign "../Fichiers/SPECTACLE.IND"
-              organization is indexed access mode is random
+              organization is indexed access mode is dynamic
               record key is codeSpect
-                  alternate record key is titre
-                  alternate record key is dateRepresentation
+                  alternate record key is titre with duplicates
+                  alternate record key is dateRepresentation with 
+                               duplicates
                   file status is fs-fiSpectacle.
 
           select FiSalle assign "../Fichiers/SALLE.REL"
