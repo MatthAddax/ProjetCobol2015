@@ -3,12 +3,7 @@
 │ │ rechercheCodeSpect │
 │ o────────────────────o↓ codeErreur,enregSpect
 │┌── if(codeErreur = 0)
-││ o────────────────────o↓ enregMaj.categAnnulation, enregSpect
-││ │ rechercheCategorie │
-││ o────────────────────o↓ iReserv
-││┌── if(codeErreur = 0)
-│││ nbReserv(iReserv)-=nbAnnulation
-││└──
+││ nbReserv(enregMaj.categAnnulation)-=nbAnnulation
 │└──
 └──
  
@@ -19,11 +14,4 @@
 │┌── if(UNVALID KEYS)
 ││ codeErreur = 5
 │└──
-└──
- 
-┌───*rechercheCategorie
-│ iReserv = 0
-│╔══ do until(iReserv == enregMaj.categAnnulation)
-│║ iReserv++
-│╙──
 └──
