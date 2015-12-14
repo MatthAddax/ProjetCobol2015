@@ -10,10 +10,9 @@
        file-control.
       *****************************************
           select OPTIONAL FiSpectacle assign "../Fichiers/SPECTACLE.IND"
-               organization is indexed access mode is RANDOM
-               record key is codeSpect
-                   alternate record key is titre
-                       with duplicates
+                   organization is indexed access mode is dynamic
+                   record key is codeSpect
+                   alternate record key is titre with duplicates
                    alternate record key is dateRepresentation
                        with duplicates
                    file status is fs-fiSpectacle.

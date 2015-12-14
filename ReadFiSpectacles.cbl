@@ -6,7 +6,7 @@
       ******************************************************************
        IDENTIFICATION DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-       PROGRAM-ID. YOUR-PROGRAM-NAME.
+       PROGRAM-ID. ReadFiSpectacles.
        ENVIRONMENT DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        CONFIGURATION SECTION.
@@ -15,12 +15,16 @@
       *-----------------------
        FILE-CONTROL.
       *-----------------------
-          select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
-              organization is indexed access mode is DYNAMIC
-              record key is codeSpect
-                  alternate record key is titre
-                  alternate record key is dateRepresentation
-                  file status is fs-fiSpectacle.
+          select OPTIONAL FiSpectacle assign 
+          "../Fichiers/SPECTACLE.IND"
+                               organization is indexed
+                               access mode is dynamic
+                               record key is codeSpect
+                               alternate record key is titre  with 
+                               duplicates
+                               alternate record key is 
+                            dateRepresentation  with duplicates
+                               file status is fs-fiSpectacle.
        DATA DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        FILE SECTION.
@@ -78,6 +82,7 @@
            CLOSE FiSpectacle.
            STOP RUN.
 
+
        afficheSpectacle.
            move codeSpect to codeSpectEd.
            move titre to titreEd.
@@ -85,9 +90,9 @@
            move dateRepresentation to dateRepresentationEd.
            move tabReservationsCategories
                            to tabReservationsCategoriesEd.
-
+           display "test".
            display ligneAffichage.
            display EnregSpectacle.
            READ FiSpectacle NEXT.
-       ** add other procedures here
-       END PROGRAM YOUR-PROGRAM-NAME.
+      ** add other procedures here
+       END PROGRAM ReadFiSpectacles.
