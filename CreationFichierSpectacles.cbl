@@ -9,7 +9,7 @@
       *----------------------------------------
        file-control.
       *****************************************
-           select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
+          select OPTIONAL FiSpectacle assign "../Fichiers/SPECTACLE.IND"
                organization is indexed access mode is RANDOM
                record key is codeSpect
                    alternate record key is titre
@@ -60,7 +60,7 @@
 
        main.
       *----------------------------------------
-           OPEN I-O FiSpectacle.
+           OPEN OUTPUT FiSpectacle.
            OPEN INPUT FiAjoutSpectacle.
            PERFORM ajouterSpectacle.
            CLOSE FiAjoutSpectacle FiSpectacle.
@@ -72,6 +72,8 @@
            perform until finAjoutSpectacle
                MOVE EnregAjoutSpectacle to EnregSpectacle
                write EnregSpectacle
+                   invalid key display "Erreur cle invalide"
+               end-write
                READ FiAjoutSpectacle
            end-perform.
        end program CreationFichierSpectacles.
