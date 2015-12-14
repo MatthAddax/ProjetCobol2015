@@ -32,10 +32,14 @@
               ORGANIZATION IS LINE SEQUENTIAL
               FILE STATUS IS fs-FiMaj.
 
+           select optional debug assign "../debug.seq"
+               organization is line sequential.
        DATA DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        FILE SECTION.
       *-----------------------
+       FD debug.
+       01 EnregDebug                       pic x(100).
        FD FiSpectacle.
        01 EnregSpectacle.
            02 codeSpect.
@@ -82,29 +86,39 @@
        77 fs-fiMaj                         pic x(2).
            88 finFiMaj             VALUE "10".
        77 codeNumPrec                      pic 9(2).
+       77 iCategorie                       pic 9.
+       77 titreSave                        pic x(30).
+       77 codeGenreSave                    pic x(5).
        PROCEDURE DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        MAIN-PROCEDURE.
       ************************************
            OPEN INPUT FiMaj.
            OPEN I-O FiSpectacle.
+           OPEN output debug.
            DISPLAY fs-FiSpectacle.
            display fs-FiMaj.
            read FiMaj.
            perform miseAJour until finFiMaj.
 
-           close FiMaj, FiSpectacle.
+           close FiMaj, FiSpectacle, debug.
            stop run.
        miseAJour.
       ************************************
            evaluate codeMaj
                WHEN 'N'
                    display "ajoutSpectacle"
+                   move "ajoutSpectacle" to EnregDebug
+                   perform ajoutSpectacle
                WHEN 'R'
                    DISPLAY 'Reservation'
+                   move 'Reservation' to EnregDebug
                WHEN 'A'
                    DISPLAY 'Annulation'
+                   move 'Annulation' to EnregDebug
            end-evaluate.
+
+           write EnregDebug.
 
            read FiMaj.
 
@@ -113,26 +127,53 @@
        ajoutSpectacle.
       ************************************
            move codeGenreNouv to codeGenre.
+           move "set key codeGenre" to EnregDebug.
+           write EnregDebug.
            start FiSpectacle key is = codeGenre
                invalid key perform nouveauSpectacle
                not invalid key
-                       read FiSpectacle next
                        perform goDernierCodeNum
            end-start.
 
+           move "fin start codeGenre" to EnregDebug.
+           write EnregDebug.
+
+           move codeGenre to codeGenreSave.
+           move titreNouv to titreSave.
+
+           read FiMaj.
+           perform ajoutRepresentation until finFiMaj
+                                OR codeGenreSave not = codeGenreNouveau.
        nouveauSpectacle.
       ************************************
-           move 1 to codeNum.
+           move 0 to codeNum.
        goDernierCodeNum.
       ************************************
+           read FiSpectacle next
            perform until finErreurFiSpectacle
                            OR codeGenre not = codeGenreNouv
-               codeNumPrec = codeNum
+               move codeNum to codeNumPrec
                read FiSpectacle next
            end-perform.
+
+           move codeNumPrec to codeNum.
        ajoutRepresentation.
       ************************************
-           move titreNouv to titre.
+           move "ajoute representation" to EnregDebug.
+           write EnregDebug.
+           move titreSave to titre.
            move dateRepresentationNouveau to dateRepresentation.
            move numSalleNouveau to numSalle.
+           add 1 to codeNum.
+
+
+           perform varying iCategorie from 1 by 1 until iCategorie > 3
+               MOVE 0 TO nbReservations(iCategorie)
+           end-perform.
+           display EnregSpectacle.
+           move EnregSpectacle to EnregDebug.
+           write EnregDebug.
+           write EnregSpectacle.
+           read FiMaj.
+
        END PROGRAM GestionSpectacle2.

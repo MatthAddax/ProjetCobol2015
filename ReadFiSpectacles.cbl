@@ -15,20 +15,24 @@
       *-----------------------
        FILE-CONTROL.
       *-----------------------
-          select OPTIONAL FiSpectacle assign 
+          select OPTIONAL FiSpectacle assign
           "../Fichiers/SPECTACLE.IND"
                                organization is indexed
                                access mode is dynamic
                                record key is codeSpect
-                               alternate record key is titre  with 
+                               alternate record key is titre  with
                                duplicates
-                               alternate record key is 
+                               alternate record key is
                             dateRepresentation  with duplicates
                                file status is fs-fiSpectacle.
+           select optional indLisible assign "../indLisible.seq"
+               organization is line sequential.
        DATA DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        FILE SECTION.
       *-----------------------
+       FD indLisible.
+       01 EnregIND                         pic x(100).
        FD FiSpectacle.
        01 EnregSpectacle.
            02 codeSpect.
@@ -70,6 +74,7 @@
       * The main procedure of the program
       **
            OPEN I-O FiSpectacle.
+           OPEN output indLisible.
            DISPLAY fs-FiSpectacle.
            MOVE SPACES TO codeSpect.
            START FiSpectacle key is > codeSpect
@@ -79,7 +84,7 @@
            DISPLAY fs-FiSpectacle.
            PERFORM afficheSpectacle UNTIL finErreurFiSpectacle.
            DISPLAY fs-FiSpectacle.
-           CLOSE FiSpectacle.
+           CLOSE FiSpectacle indLisible.
            STOP RUN.
 
 
@@ -92,6 +97,8 @@
                            to tabReservationsCategoriesEd.
            display ligneAffichage.
            display EnregSpectacle.
+           move EnregSpectacle to EnregIND.
+           write EnregIND.
            READ FiSpectacle NEXT.
       ** add other procedures here
        END PROGRAM ReadFiSpectacles.

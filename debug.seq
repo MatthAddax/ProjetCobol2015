@@ -1,0 +1,52 @@
+set key codeGenre
+fin start codeGenre
+ajoute representation
+JEUNE10Chocolat, le clown noir       111008000000000
+ajoute representation
+JEUNE11Chocolat, le clown noir       111010000000000
+JEUNE11Chocolat, le clown noir       111010000000000
+JEUNE11Chocolat, le clown noir       111010000000000
+JEUNE11Chocolat, le clown noir       111010000000000
+Reservation
+Reservation
+Reservation
+set key codeGenre
+fin start codeGenre
+ajoute representation
+DANSE01Stomp                         021205000000000
+ajoute representation
+DANSE02Stomp                         021206000000000
+ajoute representation
+DANSE03Stomp                         021207000000000
+ajoute representation
+DANSE04Stomp                         021218000000000
+DANSE04Stomp                         021218000000000
+DANSE04Stomp                         021218000000000
+Annulation
+Reservation
+Reservation
+Annulation
+set key codeGenre
+fin start codeGenre
+fin start codeGenre
+fin start codeGenre
+fin start codeGenre
+Reservation
+Reservation
+Reservation
+Reservation
+Reservation
+Reservation
+Reservation
+Reservation
+Annulation
+Annulation
+Annulation
+Reservation
+set key codeGenre
+fin start codeGenre
+fin start codeGenre
+Reservation
+Reservation
+Reservation
+Annulation
