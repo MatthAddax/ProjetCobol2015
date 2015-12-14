@@ -31,6 +31,8 @@
           SELECT FiMaj assign "../Fichiers/maj.seq"
               ORGANIZATION IS LINE SEQUENTIAL
               FILE STATUS IS fs-FiMaj.
+          SELECT FiErreur assign "../Fichiers/erreurs.seq"
+              ORGANIZATION IS LINE SEQUENTIAL.
 
            select optional debug assign "../debug.seq"
                organization is line sequential.
@@ -40,6 +42,10 @@
       *-----------------------
        FD debug.
        01 EnregDebug                       pic x(100).
+       FD FiErreur.
+       01 EnregErreur.
+           02 codeErreurEd                 pic x(2).
+           02 ligneErreur                  pic x(80).
        FD FiSpectacle.
        01 EnregSpectacle.
            02 codeSpect.
@@ -79,6 +85,7 @@
            02 dateRepresentationNouveau    pic 9(4).
        WORKING-STORAGE SECTION.
       *-----------------------
+       01 codeErreur                       pic xx.
        77 fs-fiSpectacle                   pic x(2).
            88 finErreurFiSpectacle VALUES "10" THRU "99".
        77 fs-fiSalle                       pic x(2).
@@ -113,6 +120,7 @@
                WHEN 'R'
                    DISPLAY 'Reservation'
                    move 'Reservation' to EnregDebug
+                   perform reservation
                WHEN 'A'
                    DISPLAY 'Annulation'
                    move 'Annulation' to EnregDebug
@@ -121,6 +129,59 @@
            write EnregDebug.
 
            read FiMaj.
+
+       reservation.
+      ************************************
+      *    recherche si places disponibles
+           display titreReserve
+                   dateReserve
+                   categReserve
+                   nbPlacesReserve.
+
+           move titreReserve to titre.
+           start FiSpectacle key is = titre
+               invalid key display "error"
+               not invalid key display
+                                   "vérifier si date existe et est ok"
+                               display
+                                   "si oui vérifier places max de la"
+                               DISPLAY
+                                   "salle et si ok faire l'ajout"
+                               DISPLAY
+                                   "sinon faire les erreurs adaptées ;)"
+           end-start.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
