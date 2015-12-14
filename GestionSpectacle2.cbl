@@ -44,7 +44,7 @@
        01 EnregDebug                       pic x(100).
        FD FiErreur.
        01 EnregErreur.
-           02 codeErreurEd                 pic x(2).
+           02 codeErreur                   pic x(2).
            02 ligneErreur                  pic x(80).
        FD FiSpectacle.
        01 EnregSpectacle.
@@ -85,7 +85,6 @@
            02 dateRepresentationNouveau    pic 9(4).
        WORKING-STORAGE SECTION.
       *-----------------------
-       01 codeErreur                       pic xx.
        77 fs-fiSpectacle                   pic x(2).
            88 finErreurFiSpectacle VALUES "10" THRU "99".
        77 fs-fiSalle                       pic x(2).
@@ -100,15 +99,16 @@
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        MAIN-PROCEDURE.
       ************************************
-           OPEN INPUT FiMaj.
+           OPEN INPUT FiMaj FiSalle.
            OPEN I-O FiSpectacle.
            OPEN output debug.
            DISPLAY fs-FiSpectacle.
            display fs-FiMaj.
            read FiMaj.
+
            perform miseAJour until finFiMaj.
 
-           close FiMaj, FiSpectacle, debug.
+           close FiMaj, FiSpectacle, debug, FiSalle.
            stop run.
        miseAJour.
       ************************************
@@ -140,7 +140,8 @@
 
            move titreReserve to titre.
            start FiSpectacle key is = titre
-               invalid key display "error"
+               invalid key move 02 to codeErreur
+                           perform writeErreur
                not invalid key display
                                    "vérifier si date existe et est ok"
                                display
@@ -149,8 +150,40 @@
                                    "salle et si ok faire l'ajout"
                                DISPLAY
                                    "sinon faire les erreurs adaptées ;)"
+                               perform reservationPlaces
            end-start.
 
+       reservationPlaces.
+      ************************************
+
+           perform checkDateReservation.
+           if dateReserve = dateRepresentation
+               perform checkPlacesSalle
+               perform miseAJourPlaces
+           else
+               move 03 to codeErreur
+               perform writeErreur
+           end-if.
+
+       checkDateReservation.
+      ************************************
+           perform until finErreurFiSpectacle
+                           OR dateReserve not = dateRepresentation
+               read FiSpectacle next
+           end-perform.
+
+       checkPlacesSalle.
+      ************************************
+      *******  lire fichier salles *******
+      ************************************
+
+       miseAJourPlaces.
+      ************************************
+           move numSalle to salleID.
+           start FiSalle key is = salleID
+               invalid key display "salle inexistante"
+               not invalid key display "salle ok"
+           end-start.
 
 
 
@@ -236,5 +269,7 @@
            write EnregDebug.
            write EnregSpectacle.
            read FiMaj.
-
+       writeErreur.
+           move EnregMAJ to ligneErreur.
+           write EnregErreur.
        END PROGRAM GestionSpectacle2.
