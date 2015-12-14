@@ -1,9 +1,15 @@
-┌───*Annulation
+﻿┌───*Annulation
 │ o────────────────────o↓ enregMaj.codeSpectAnnulation
 │ │ rechercheCodeSpect │
 │ o────────────────────o↓ codeErreur,enregSpect
 │┌── if(codeErreur = 0)
+<<<<<<< HEAD
 ││ nbReserv(enregMaj.categAnnulation)-=nbAnnulation
+=======
+││┌── if(codeErreur = 0)
+│││ nbReserv(enregMaj.cateAnnulation)-=nbAnnulation
+││└──
+>>>>>>> 66b8a7fb29c1759f1d5960afbf670acf12dde4a5
 │└──
 └──
  
@@ -15,3 +21,13 @@
 ││ codeErreur = 5
 │└──
 └──
+<<<<<<< HEAD
+=======
+ /*Pas besoin de ça, ça reviens à faire : iReserv = enregMaj.categAnnulation*/
+┌───*rechercheCategorie
+│ iReserv = 0
+│╔══ do until(iReserv == enregMaj.categAnnulation)
+│║ iReserv++
+│╙──
+└──
+>>>>>>> 66b8a7fb29c1759f1d5960afbf670acf12dde4a5
