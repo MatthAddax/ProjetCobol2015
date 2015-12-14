@@ -77,6 +77,7 @@
        77 iCategorie                       pic 9.
        77 cleLectureIndexe                 pic x(5).
        77 codeNumPrec                      pic 9(2).
+       77 codeGenreSave                    pic x(5).
        procedure division.
       *========================================
        main.
@@ -113,27 +114,22 @@
       *----------------------------------------
       *--------------Garnir clé----------------
       *----------------------------------------
-           MOVE SPACES TO codeSpect.
+           MOVE codeGenreNouv TO codeGenre
 
-           START FiSpectacle key is > codeSpect
-                   INVALID KEY PERFORM ajoutNouveauSpectacle
-                               UNTIL FinFiMaj OR
-                               codeGenreNouv NOT EQUALS codeGenreNouveau
-                   not INVALID KEY READ FiSpectacle NEXT
+           START FiSpectacle key is = codeGenre
+               INVALID KEY PERFORM ajoutNouveauSpectacle
+               not INVALID KEY READ FiSpectacle NEXT
+                               perform positionnementDernier
            END-START.
 
            DISPLAY fs-FiSpectacle.
-           PERFORM codeGenreExists until finErreurFiSpectacle
-                                      OR codeGenre EQUALS codeGenreNouv.
-           IF codeGenre EQUALS codeGenreNouv THEN
-               PERFORM codePlusEleve UNTIL finErreurFiSpectacle
-                                   OR codeGenre NOT EQUALS codeGenreNouv
-               PERFORM ajoutRepresentation UNTIL FinFiMaj
-                                OR codeGenre NOT EQUALS codeGenreNouveau
-           ELSE
-               PERFORM ajoutNouveauSpectacle UNTIL FinFiMaj OR
-                               codeGenreNouv NOT EQUALS codeGenreNouveau
-           END-IF.
+
+           PERFORM ajoutRepresentation UNTIL FinFiMaj
+                               OR codeGenre NOT EQUALS codeGenreNouveau.
+       positionnementDernier.
+           move codeGenreNouv to codeGenreSave.
+           PERFORM codePlusEleve UNTIL finErreurFiSpectacle
+                                   OR codeGenre NOT = codeGenreSave.
       *****************************************
        codeGenreExists.
       *****************************************
