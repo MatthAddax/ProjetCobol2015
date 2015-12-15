@@ -137,9 +137,9 @@
        77 totalPlacesReservee              pic 9999.
        77 totalPlacesDisponibles           pic 9999.
        77 taux                             pic 9V99.
-
-
-
+       77 dateSave                         pic 9999.
+       77 nbSpectacleDuJour                pic 999.
+       77 grandeStringSpectacle            pic x(10000).
        PROCEDURE DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        MAIN-PROCEDURE.
@@ -150,9 +150,11 @@
 
            read FiMaj.
 
-           perform miseAJour until finFiMaj.
+      *     perform miseAJour until finFiMaj.
 
            perform listingParTitre.
+
+           perform listingOctobre.
 
            close FiMaj,
                  FiSpectacle,
@@ -314,7 +316,7 @@
                invalid key display "fichier vide"
                not invalid key
                    read FiSpectacle next
-                   perform listeTitre until finErreurFiSpectacle
+      *            perform listeTitre until finErreurFiSpectacle
            end-start.
 
        listeTitre.
@@ -360,7 +362,15 @@
       ************************************
       **********listing octobre***********
       ************************************
-
+           move 10 to moisRepresentation.
+           start FiSpectacle key = moisRepresentation
+               invalid key display "pas de spectacles en octobre"
+               not invalid key read FiSpectacle next
+                               perform listeOctobre
+                                       until finErreurFiSpectacle
+           end-start.
+       listeOctobre.
+      ************************************
 
        embelliDate.
       ************************************
