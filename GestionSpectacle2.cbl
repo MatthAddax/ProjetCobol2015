@@ -62,7 +62,9 @@
                03 codeNum                  pic 9(2).
            02 titre                        pic x(30).
            02 numSalle                     pic 9(2).
-           02 dateRepresentation           pic 9(4).
+           02 dateRepresentation.
+               03  moisRepresentation      pic 9(2).
+               03  jourRepresentation      pic 9(2).
            02 tabReservationsCategories    pic 9(9).
            02 REDEFINES tabReservationsCategories.
                03 nbReservations           pic 9(3) OCCURS 3.
@@ -131,28 +133,12 @@
        77 codeGenreSave                    pic x(5).
        77 placesTemp                       pic 9(3).
        77 choix                            pic x.
-       77 jour                             pic 99.
-       77 mois                             pic 99.
-       77 annee                            pic 9999.
+       77 annee                            pic 9999 value 2015.
        77 totalPlacesReservee              pic 9999.
        77 totalPlacesDisponibles           pic 9999.
        77 taux                             pic 9V99.
 
 
-      *************************************************
-      ***variable utilisée pour calcul date affichée***
-      *************************************************
-       01  WS-CURRENT-DATE-DATA.
-	       05  WS-CURRENT-DATE.
-	           10  WS-CURRENT-YEAR			PIC 9(04).
-	           10  WS-CURRENT-MONTH			PIC 9(02).
-	           10  WS-CURRENT-DAY			PIC 9(02).
-	       05  WS-CURRENT-TIME.
-	       	   10  WS-CURRENT-HOURS		PIC 9(02).
-	       	   10  WS-CURRENT-MINUTE		PIC 9(02).
-	       	   10  WS-CURRENT-SECOND		PIC 9(02).
-	       	   10  WS-CURRENT-MILLISECONDS	PIC 9(02).
-	       05  WS-DIFF-FROM-GMT			PIC S9(04).
 
        PROCEDURE DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -197,10 +183,6 @@
        reservation.
       ************************************
       *    recherche si places disponibles
-           display titreReserve
-                   dateReserve
-                   categReserve
-                   nbPlacesReserve.
 
            move titreReserve to titre.
            start FiSpectacle key is = titre
@@ -317,7 +299,7 @@
            perform varying iCategorie from 1 by 1 until iCategorie > 3
                MOVE 0 TO nbReservations(iCategorie)
            end-perform.
-           display EnregSpectacle.
+
            move EnregSpectacle to EnregDebug.
            write EnregDebug.
            write EnregSpectacle.
@@ -373,27 +355,16 @@
 
                read FiSpectacle next
            end-perform.
+
        listingOctobre.
       ************************************
       **********listing octobre***********
       ************************************
 
+
        embelliDate.
       ************************************
-           divide dateRepresentation by 100
-               giving mois
-               remainder jour
-           end-divide.
-           move function CURRENT-DATE to WS-CURRENT-DATE-DATA.
-           move WS-CURRENT-YEAR to annee.
-           if mois < WS-CURRENT-MONTH	 then
-               add 1 to annee
-           else
-               if WS-CURRENT-MONTH	= mois and WS-CURRENT-DAY	>= jour then
-                   add 1 to annee
-               end-if
-           end-if.
-           string jour "/" mois "/" annee
+           string jourRepresentation "/" moisRepresentation "/" annee
                into dateRepresentationEd
            end-string.
 
