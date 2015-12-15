@@ -104,31 +104,12 @@
            OPEN INPUT FiMaj FiSalle.
            OPEN I-O FiSpectacle.
            OPEN output debug FiErreur.
-           DISPLAY fs-FiSpectacle.
-           display fs-FiMaj.
+
            read FiMaj.
 
-           display
-           "Voulez vous faire un listing complet des spectacles -
-           triés par titre? (o/n)".
-           accept choix.
+      *     perform miseAJour until finFiMaj.
 
-           if choix = 'o'
-               perform listingParTitre
-           end-if.
-
-           move '' to choix.
-
-           display
-           "Voulez vous faire un listing complet des spectacles -
-           du mois d'octobre? (o/n)".
-           accept choix.
-
-           if choix = 'o'
-               perform listingOctobre
-           end-if.
-
-           perform miseAJour until finFiMaj.
+           perform listingParTitre.
 
            close FiMaj, FiSpectacle, debug, FiSalle, FiErreur.
            stop run.
@@ -282,6 +263,29 @@
       ************************************
       **********listing complet***********
       ************************************
+           move spaces to titre.
+           start FiSpectacle key is > titre
+               invalid key display "fichier vide"
+               not invalid key
+                   read FiSpectacle next
+                   perform listeTitre until finErreurFiSpectacle
+           end-start.
+
+       listeTitre.
+           move titre to titreSave.
+           display titre
+           perform until finErreurFiSpectacle OR
+                           titre not = titreSave
+               display numSalle
+               display dateRepresentation
+               perform varying iCategorie
+                   from 1 by 1 until iCategorie > 3
+                   display iCategorie
+                   display nbReservations(iCategorie)
+               end-perform
+               read FiSpectacle next
+           end-perform.
+
        listingOctobre.
       ************************************
       **********listing octobre***********
