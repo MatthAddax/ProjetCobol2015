@@ -186,8 +186,14 @@
            end-start.
        miseAJourPlaces.
       ************************************
-           add nbPlaces(categReserve) to nbPlacesReserve
+           add nbReservations(categReserve) to nbPlacesReserve
                giving placesTemp.
+           if placesTemp > nbPlaces(categReserve) then
+               move 4 to codeErreur
+               perform writeErreur
+           else
+               move placesTemp to nbReservations(categReserve)
+           end-if.
 
 
 
