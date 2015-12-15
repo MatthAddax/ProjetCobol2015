@@ -96,6 +96,7 @@
        77 titreSave                        pic x(30).
        77 codeGenreSave                    pic x(5).
        77 placesTemp                       pic 9(3).
+       77 choix                            pic x.
        PROCEDURE DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        MAIN-PROCEDURE.
@@ -107,28 +108,45 @@
            display fs-FiMaj.
            read FiMaj.
 
+           display
+           "Voulez vous faire un listing complet des spectacles -
+           triés par titre? (o/n)".
+           accept choix.
+
+           if choix = 'o'
+               perform listingParTitre
+           end-if.
+
+           move '' to choix.
+
+           display
+           "Voulez vous faire un listing complet des spectacles -
+           du mois d'octobre? (o/n)".
+           accept choix.
+
+           if choix = 'o'
+               perform listingOctobre
+           end-if.
+
            perform miseAJour until finFiMaj.
 
            close FiMaj, FiSpectacle, debug, FiSalle, FiErreur.
            stop run.
+
        miseAJour.
       ************************************
            move SPACES to EnregDebug.
            evaluate codeMaj
                WHEN 'N'
-      *             display "ajoutSpectacle"
-      *             move "ajoutSpectacle" to EnregDebug
                    perform ajoutSpectacle
                WHEN 'R'
-                   DISPLAY 'Reservation'
-                   move 'Reservation' to EnregDebug
                    perform reservation
                WHEN 'A'
-                   DISPLAY 'Annulation'
-                   move 'Annulation' to EnregDebug
+                   perform annulation
+               WHEN OTHER
+                   move 1 to codeErreur
+                   perform writeErreur
            end-evaluate.
-
-           write EnregDebug.
 
            read FiMaj.
 
@@ -144,15 +162,7 @@
            start FiSpectacle key is = titre
                invalid key move 02 to codeErreur
                            perform writeErreur
-               not invalid key display
-                                   "vérifier si date existe et est ok"
-                               display
-                                   "si oui vérifier places max de la"
-                               DISPLAY
-                                   "salle et si ok faire l'ajout"
-                               DISPLAY
-                                   "sinon faire les erreurs adaptées ;)"
-                               perform reservationPlaces
+               not invalid key perform reservationPlaces
            end-start.
 
        reservationPlaces.
@@ -184,6 +194,7 @@
                invalid key display "salle inexistante"
                not invalid key perform miseAJourPlaces
            end-start.
+
        miseAJourPlaces.
       ************************************
            add nbReservations(categReserve) to nbPlacesReserve
@@ -195,38 +206,22 @@
                move placesTemp to nbReservations(categReserve)
            end-if.
 
+       annulation.
+      ************************************
+           move codeSpectacleAnnulation to codeSpect.
 
+           start FiSpectacle key is = codeSpect
+               invalid key move 5 to codeErreur
+                           perform writeErreur
+               not invalid key perform annuleSpectale
+           end-start.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+       annuleSpectale.
+      ************************************
+           SUBTRACT nbPlacesAnnulation from nbPlaces(categAnnulation).
+           if nbPlaces(categAnnulation) < 0
+              move zeroes to nbPlaces(categAnnulation)
+           end-if.
 
        ajoutSpectacle.
       ************************************
@@ -248,9 +243,11 @@
            read FiMaj.
            perform ajoutRepresentation until finFiMaj
                                 OR codeGenreSave not = codeGenreNouveau.
+
        nouveauSpectacle.
       ************************************
            move 0 to codeNum.
+
        goDernierCodeNum.
       ************************************
            read FiSpectacle next
@@ -261,6 +258,7 @@
            end-perform.
 
            move codeNumPrec to codeNum.
+
        ajoutRepresentation.
       ************************************
            move "ajoute representation" to EnregDebug.
@@ -279,7 +277,22 @@
            write EnregDebug.
            write EnregSpectacle.
            read FiMaj.
+
+       listingParTitre.
+      ************************************
+      **********listing complet***********
+      ************************************
+       listingOctobre.
+      ************************************
+      **********listing octobre***********
+      ************************************
+
+
        writeErreur.
+      ************************************
            move EnregMAJ to ligneErreur.
            write EnregErreur.
+      ************************************
+
+
        END PROGRAM GestionSpectacle2.
