@@ -1,0 +1,20 @@
+set key codeGenre
+fin start codeGenre
+ajoute representation
+JEUNE10Chocolat, le clown noir       081110000000000
+ajoute representation
+JEUNE11Chocolat, le clown noir       101110000000000
+set key codeGenre
+fin start codeGenre
+ajoute representation
+DANSE01Stomp                         050212000000000
+ajoute representation
+DANSE02Stomp                         060212000000000
+ajoute representation
+DANSE03Stomp                         070212000000000
+ajoute representation
+DANSE04Stomp                         180212000000000
+set key codeGenre
+fin start codeGenre
+set key codeGenre
+fin start codeGenre
