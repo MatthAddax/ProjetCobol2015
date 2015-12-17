@@ -14,12 +14,13 @@
        INPUT-OUTPUT SECTION.
       *-----------------------
        file-control.
-         select OPTIONAL FiSpectacle assign "../Fichiers/SPECTACLE.IND"
+         select FiSpectacle assign "../Fichiers/SPECTACLE.IND"
              organization is indexed access mode is dynamic
              record key is codeSpect
-                 alternate record key is titre with duplicates
+                 alternate record key is titre
+                                       with duplicates
                  alternate record key is dateRepresentation
-                                               with duplicates
+                                       with duplicates
                  file status is fs-fiSpectacle.
 
          select FiSalle assign "../Fichiers/SALLE.REL"
@@ -53,7 +54,10 @@
        FD FiListingTitre.
        01 EnreglistingTitre                pic x(100).
        FD FiListingOctobre.
-       01 EnregListingOctobre              pic x(100).
+       01 EnregListingOctobre.
+           02 datesOctobre                 pic x(10).
+           02 listeTitres                  pic x(1000).
+           02 nbSpectacles                 pic 9(2).
 
        FD FiSpectacle.
        01 EnregSpectacle.
@@ -70,7 +74,6 @@
                03 nbReservations           pic 9(3) OCCURS 3.
        FD FiSalle.
        01 EnregSalle.
-           02 salleID                      pic 9(2).
            02 tabPlacesCategories          pic 9(9).
            02 REDEFINES tabPlacesCategories.
                03 nbPlaces                 pic 9(3) OCCURS 3.
@@ -140,6 +143,9 @@
        77 dateSave                         pic 9999.
        77 nbSpectacleDuJour                pic 999.
        77 grandeStringSpectacle            pic x(10000).
+       77 jourSauve                        pic 99.
+       77 pointeur                         pic 99.
+       77 salleID                          pic 99.
        PROCEDURE DIVISION.
       *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
        MAIN-PROCEDURE.
@@ -150,7 +156,7 @@
 
            read FiMaj.
 
-      *     perform miseAJour until finFiMaj.
+           perform miseAJour until finFiMaj.
 
            perform listingParTitre.
 
@@ -173,14 +179,16 @@
                    perform ajoutSpectacle
                WHEN 'R'
                    perform reservation
+                   read FiMaj
                WHEN 'A'
                    perform annulation
+                   read FiMaj
                WHEN OTHER
-                   move 1 to codeErreur
+                   move 01 to codeErreur
                    perform writeErreur
+                   read FiMaj
            end-evaluate.
 
-           read FiMaj.
 
        reservation.
       ************************************
@@ -198,7 +206,6 @@
 
            perform checkDateReservation.
            if dateReserve = dateRepresentation
-               perform checkPlacesSalle
                perform miseAJourPlaces
            else
                move 03 to codeErreur
@@ -208,27 +215,22 @@
        checkDateReservation.
       ************************************
            perform until finErreurFiSpectacle
-                           OR dateReserve not = dateRepresentation
+                           OR dateReserve = dateRepresentation
                read FiSpectacle next
            end-perform.
-
-       checkPlacesSalle.
-      ************************************
-      *******  lire fichier salles *******
-      ************************************
-
-           move numSalle to salleID.
-           start FiSalle key is = salleID
-               invalid key display "salle inexistante"
-               not invalid key perform miseAJourPlaces
-           end-start.
 
        miseAJourPlaces.
       ************************************
            add nbReservations(categReserve) to nbPlacesReserve
                giving placesTemp.
-           if placesTemp > nbPlaces(categReserve) then
-               move 4 to codeErreur
+           move numSalle to salleID.
+           read FiSalle.
+          display "Nb reserv actuelles : " nbReservations(categReserve).
+          DISPLAY "Nb reservations MAJ : " nbPlacesReserve.
+          display "Total reservations  : " placesTemp "/"
+               nbPlaces(categReserve).
+           if placesTemp > nbPlaces(categReserve)
+               move 04 to codeErreur
                perform writeErreur
            else
                move placesTemp to nbReservations(categReserve)
@@ -255,18 +257,14 @@
        ajoutSpectacle.
       ************************************
            move codeGenreNouv to codeGenre.
-           move "set key codeGenre" to EnregDebug.
-           write EnregDebug.
+           move codeGenreNouv to codeGenreSave.
            start FiSpectacle key is = codeGenre
                invalid key perform nouveauSpectacle
                not invalid key
                        perform goDernierCodeNum
            end-start.
 
-           move "fin start codeGenre" to EnregDebug.
-           write EnregDebug.
 
-           move codeGenre to codeGenreSave.
            move titreNouv to titreSave.
 
            read FiMaj.
@@ -292,6 +290,7 @@
       ************************************
            move "ajoute representation" to EnregDebug.
            write EnregDebug.
+           move codeGenreSave to codeGenre.
            move titreSave to titre.
            move dateRepresentationNouveau to dateRepresentation.
            move numSalleNouveau to numSalle.
@@ -316,7 +315,7 @@
                invalid key display "fichier vide"
                not invalid key
                    read FiSpectacle next
-      *            perform listeTitre until finErreurFiSpectacle
+                   perform listeTitre until finErreurFiSpectacle
            end-start.
 
        listeTitre.
@@ -362,22 +361,45 @@
       ************************************
       **********listing octobre***********
       ************************************
-           move 10 to moisRepresentation.
-           start FiSpectacle key = moisRepresentation
+           move 1000 to dateRepresentation.
+           start FiSpectacle key > dateRepresentation
                invalid key display "pas de spectacles en octobre"
                not invalid key read FiSpectacle next
                                perform listeOctobre
                                        until finErreurFiSpectacle
+                                       OR dateRepresentation > 1100
            end-start.
+
        listeOctobre.
       ************************************
+           move jourRepresentation to jourSauve.
+           perform embelliDate.
+           move dateRepresentationEd to datesOctobre.
+           move spaces to listeTitres.
+           move 1 to pointeur.
+           move 0 to nbSpectacles.
+           perform until finErreurFiSpectacle
+                   OR jourSauve not = jourRepresentation
+                   OR dateRepresentation > 1100
+               string titre delimited by "  " "-"
+                 into listeTitres with pointer pointeur
+               end-string
+               add 1 to nbSpectacles
 
+               read FiSpectacle next
+           end-perform.
+           subtract 1 from pointeur.
+           move " " to listeTitres(pointeur:1).
+
+           display jourRepresentation "/" moisRepresentation.
+           display listeTitres.
+           display nbSpectacles.
+           write EnregListingOctobre.
        embelliDate.
       ************************************
            string jourRepresentation "/" moisRepresentation "/" annee
                into dateRepresentationEd
            end-string.
-
 
        getSalle.
       ************************************
@@ -386,7 +408,7 @@
                not invalid key
                    read FiSalle next
                invalid key display "Une erreur est survenue au niveau -
-               fichier SALLE.REL, veuillez le regénérer"
+               du fichier SALLE.REL, veuillez le regénérer"
            end-start.
 
 
@@ -395,6 +417,4 @@
            move EnregMAJ to ligneErreur.
            write EnregErreur.
       ************************************
-
-
        END PROGRAM GestionSpectacle2.

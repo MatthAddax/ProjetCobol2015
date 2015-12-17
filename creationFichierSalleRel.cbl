@@ -28,19 +28,14 @@
       *-----------------------
 
        FD FiSalle.
-       01 EnregSalle.
-           02 salleID                      pic 9(2).
-           02 tabPlacesCategories          pic 9(9).
-           02 REDEFINES tabPlacesCategories.
-               03 nbPlaces                 pic 9(3) OCCURS 3.
+       01 EnregSalle                       pic 9(9).
        FD FiMajSalle.
        01 EnregMajSalle.
            02 numSalle                     pic 9(2).
-           02 tabPlacesParSalle            pic 9(9).
-           02 REDEFINES tabPlacesParSalle.
-               03 nbPlacesParSalle         pic 9(3).
+           02 reste                        pic 9(9).
        WORKING-STORAGE SECTION.
       *-----------------------
+       01 salleID                             pic 9(2).
        01 fs-fiSalle                          pic xx.
        01 fs-fiMajSalle                       pic xx.
            88  finFiMajSalle      VALUE "10".
@@ -57,10 +52,10 @@
            perform ajouteSalle until finFiMajSalle.
 
            close FiSalle FiMajSalle.
-            STOP RUN.
+           STOP RUN.
        ajouteSalle.
-           move EnregMajSalle to EnregSalle
-           write EnregSalle.
+           move numSalle to salleID.
+           write EnregSalle from reste.
            read FiMajSalle.
       ** add other procedures here
        END PROGRAM creationFichierSallRel.
